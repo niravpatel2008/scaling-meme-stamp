@@ -1,19 +1,62 @@
-<section id="top" class="one">
-    <div class="container">
-        <a href="http://ineedchemicalx.deviantart.com/art/Moonscape-381829905" class="image featured"><img src="<?=public_path()?>images/pic01.jpg" alt="" /></a>
-        <header>
-            <h2 class="alt">This is <strong>Prologue</strong>. A <a href="http://html5up.net/license">free</a>, fully responsive<br />
-            site template by <a href="http://html5up.net">HTML5 UP</a>.</h2>
-        </header>
 
-        <p>Ligula scelerisque justo sem accumsan diam quis. Vitae natoque dictum
-        etiam semper magnis enim feugiat convallis convallis egestas rhoncus ridiculus
-        in quis risus curabitur tempor. Orci penatibus quisque laoreet condimentum
-        sollicitudin accumsan elementum.</p>
+<!-- Intro -->
+<section id="top" class="one dark cover">
+	<div class="container">
 
-        <footer>
-            <a href="#portfolio" class="button scrolly">Magna Aliquam</a>
-        </footer>
+		<header>
+			<h2 class="alt">Welcome to Ezcell</h2>
+		</header>
+		<div class="row">	
+			<div class="6u">
+			<table>
+			<tr>
+				<td  align="left">
+					<label>Prepaid Mobile No : </label>
+				</td>
+				<td align="left">
+					<input type="text" name="mobileno" id="mobileno"/>
+				</td>
+			</tr>
+			<tr>
+				<td  align="left">
+					<label>Your provider : </label>
+				</td>
+				<td align="left">
+					<select id="provider" name="provicer">
+						<option value="">-- Select --</option>
+						<option value="1">Airtel</option>
+						<option value="1">Vodaphone</option>
+						<option value="1">idea</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td  align="left">
+					<label>Recharge amount : </label>
+				</td>
+				<td align="left">
+					<input type="text" name="amount" id="amount"/>
+				</td>
+			</tr>
+			<tr>
+				<td  colspan="2" align="center"> 
+					<input type="submit" name="Proceed" value="Proceed">
+				</td>
+			</tr>
+			</table>
+			</div>
+			<div class="6u">
+				here we display google add.
+			</div>
+			<div class="12u">
+				here we display google add.
+			</div>
+		</div>
+		<footer>
+			
+		</footer>
 
-    </div>
+	</div>
 </section>
+
+			

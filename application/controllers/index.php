@@ -11,6 +11,21 @@ class Index extends CI_Controller {
 		$data['view'] = "index";
 		$this->load->view('content', $data);
 	}
+	public function articals()
+	{
+		$data['view'] = "articals";
+		$this->load->view('content', $data);
+	}
+	public function aboutus()
+	{
+		$data['view'] = "aboutus";
+		$this->load->view('content', $data);
+	}
+	public function contactus()
+	{
+		$data['view'] = "contactus";
+		$this->load->view('content', $data);
+	}
 }
 
 /* End of file index.php */
