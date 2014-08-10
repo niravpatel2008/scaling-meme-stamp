@@ -1,5 +1,5 @@
 /*
-	Prologue 1.2 by HTML5 UP
+	Prologue by HTML5 UP
 	html5up.net | @n33co
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
@@ -18,20 +18,24 @@
 		padding: 0 2em 0 2em;
 	}
 
-	/* Lists */
+	/* List */
 
-		ul.icons
+		ul
 		{
-		}	
-		
-			ul.icons li
-			{
-			}
+		}
 
-			ul.icons li a
+			ul.icons
 			{
-				width: 1.75em;
-			}
+			}	
+			
+				ul.icons li
+				{
+				}
+
+				ul.icons li a
+				{
+					width: 1.75em;
+				}
 
 	/* Item */
 	
