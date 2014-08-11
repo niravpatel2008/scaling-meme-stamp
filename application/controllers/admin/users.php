@@ -26,24 +26,26 @@ class Users extends CI_Controller {
 		$post = $this->input->post();
 
 		$columns = array(
-			array( 'db' => 'du_uname', 'dt' => 0 ),
-			array( 'db' => 'du_role',  'dt' => 1 ),
-			array( 'db' => 'du_contact',  'dt' => 2 ),
-			array( 'db' => 'du_email',  'dt' => 3 ),
-			array('db'        => 'du_createdate',
-					'dt'        => 4,
+			array( 'db' => 'Firstname', 'dt' => 0 ),
+			array( 'db' => 'Lastname',  'dt' => 1 ),
+			array( 'db' => 'EmailId',  'dt' => 2 ),
+			array( 'db' => 'Mobileno',  'dt' => 3 ),
+			array( 'db' => 'City',  'dt' => 4 ),
+			array( 'db' => 'Status',  'dt' => 5 ),
+			array('db'        => 'Createdate',
+					'dt'        => 6,
 					'formatter' => function( $d, $row ) {
 						return date( 'jS M y', strtotime($d));
 					}
 			),
-			array( 'db' => 'du_autoid',
-					'dt' => 5,
+			array( 'db' => 'id',
+					'dt' => 7,
 					'formatter' => function( $d, $row ) {
 						return '<a href="'.site_url('/admin/users/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_user('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
-		echo json_encode( SSP::simple( $post, TBLUSER, "du_autoid", $columns ) );exit;
+		echo json_encode( SSP::simple( $post, TBLUSER, "id", $columns ) );exit;
 	}
 
 	public function add()
@@ -54,56 +56,60 @@ class Users extends CI_Controller {
 			$error = array();
 			$e_flag=0;
 
-			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
-				$error['email'] = 'Please enter valid email.';
+			if(trim($post['Mobileno']) == ""){
+				$error['Mobileno'] = 'Please enter mobile number.';
 				$e_flag=1;
 			}
 			else{
-				$is_unique_email = $this->common_model->isUnique(TBLUSER, 'du_email', trim($post['email']));
+				$is_unique_email = $this->common_model->isUnique(TBLUSER, 'Mobileno', trim($post['Mobileno']));
 				if (!$is_unique_email) {
-					$error['email'] = 'Email already exists.';
+					$error['Mobileno'] = 'Mobile number already exists.';
 					$e_flag=1;
 				}
 			}
 
-			if(trim($post['user_name']) == ''){
-				$error['user_name'] = 'Please enter user name.';
+			if(trim($post['Firstname']) == ''){
+				$error['Firstname'] = 'Please enter first name.';
 				$e_flag=1;
 			}
-			if(trim($post['role']) == ''){
-				$error['role'] = 'Please select role.';
+			
+			if(!valid_email(trim($post['EmailId'])) && trim($post['EmailId']) == ''){
+				$error['EmailId'] = 'Please enter valid email.';
 				$e_flag=1;
 			}
-			if(trim($post['contact']) == ''){
-				$error['contact'] = 'Please enter contact number.';
+			if(trim($post['Role']) == ''){
+				$error['Role'] = 'Please select role.';
 				$e_flag=1;
 			}
 			
 			
-			if (trim($post['password']) != "") {
-				if($post['password'] == $post['re_password'])
+			if (trim($post['Password']) != "") {
+				if($post['Password'] == $post['re_Password'])
 				{
 					$psFlas = true;
 				}
 				else
 				{
-					$error['password'] = 'Password field does not match.';
+					$error['Password'] = 'Password field does not match.';
 					$e_flag=1;
 				}
 			}
 			else
 			{
-				$error['password'] = 'Please enter password.';
+				$error['Password'] = 'Please enter password.';
 				$e_flag=1;
 			}
 
 			if ($e_flag == 0) {
-				$data = array('du_uname' => $post['user_name'],
-								'du_role' => $post['role'],
-								'du_contact' => $post['contact'],
-								'du_email' => $post['email'],
-								'du_password' => sha1(trim($post['password'])),
-								'du_createdate' => date('Y-m-d H:i:s')
+				$data = array('Firstname' => $post['Firstname'],
+								'Lastname' => $post['Lastname'],
+								'EmailId' => $post['EmailId'],
+								'Role' => $post['Role'],
+								'Mobileno' => $post['Mobileno'],
+								'Password' => sha1(trim($post['Password'])),
+								'City' => $post['City'],
+								'State' => $post['State'],
+								'Status' => $post['Status'],
 							);
 				
 				$ret = $this->common_model->insertData(TBLUSER, $data);
@@ -132,7 +138,7 @@ class Users extends CI_Controller {
 			redirect('admin/users');
 		}
 
-		$where = 'du_autoid = '.$id;
+		$where = 'id = '.$id;
 
 		$post = $this->input->post();
 		if ($post) {
@@ -140,51 +146,60 @@ class Users extends CI_Controller {
 			$error = array();
 			$e_flag=0;
 
-			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
-				$error['email'] = 'Please enter valid email.';
+			if(trim($post['Mobileno']) == ""){
+				$error['Mobileno'] = 'Please enter mobile number.';
 				$e_flag=1;
 			}
 			else{
-				$is_unique_email = $this->common_model->isUnique(TBLUSER, 'du_email', trim($post['email']),"du_autoid <> ". $id);
+				$is_unique_email = $this->common_model->isUnique(TBLUSER, 'Mobileno', trim($post['Mobileno']));
 				if (!$is_unique_email) {
-					$error['email'] = 'Email already exists.';
+					$error['Mobileno'] = 'Mobile number already exists.';
 					$e_flag=1;
 				}
 			}
 
-			if(trim($post['user_name']) == ''){
-				$error['user_name'] = 'Please enter user name.';
+			if(trim($post['Firstname']) == ''){
+				$error['Firstname'] = 'Please enter first name.';
 				$e_flag=1;
 			}
-			if(trim($post['role']) == ''){
-				$error['role'] = 'Please select role.';
+			if(!valid_email(trim($post['EmailId'])) && trim($post['EmailId']) == ''){
+				$error['EmailId'] = 'Please enter valid email.';
 				$e_flag=1;
 			}
-			if(trim($post['contact']) == ''){
-				$error['contact'] = 'Please enter contact number.';
+			if(trim($post['Role']) == ''){
+				$error['Role'] = 'Please select role.';
+				$e_flag=1;
+			}
+			if(trim($post['Mobileno']) == ''){
+				$error['Mobileno'] = 'Please enter contact number.';
 				$e_flag=1;
 			}
 			$psFlas = false;
-			if (trim($post['password']) != "") {
-				if($post['password'] == $post['re_password'])
+			if (trim($post['Password']) != "") {
+				if($post['Password'] == $post['re_Password'])
 				{
 					$psFlas = true;
 				}
 				else
 				{
-					$error['password'] = 'Password field does not match.';
+					$error['Password'] = 'Password field does not match.';
 					$e_flag=1;
 				}
 			}
 
 			if ($e_flag == 0) {
-				$data = array('du_uname' => $post['user_name'],
-								'du_role' => $post['role'],
-								'du_contact' => $post['contact'],
-								'du_email' => $post['email']
+				$data = array('Firstname' => $post['Firstname'],
+								  'Lastname' => $post['Lastname'],
+								 'Role' => $post['Role'],
+								'Mobileno' => $post['Mobileno'],
+								'EmailId' => $post['EmailId'],
+								'City' => $post['City'],
+								'State' => $post['State'],
+								'Status' => $post['Status'],
+								'Updatedate' => date('Y-m-d H:i:s'),
 							);
 				if($psFlas)
-					$data['du_password'] = sha1(trim($post['password']));
+					$data['Password'] = sha1(trim($post['Password']));
 				$ret = $this->common_model->updateData(TBLUSER, $data, $where);
 
 				if ($ret > 0) {
@@ -216,7 +231,7 @@ class Users extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$ret = $this->common_model->deleteData(TBLUSER, array('du_autoid' => $post['id'] ));
+			$ret = $this->common_model->deleteData(TBLUSER, array('id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('User deleted successfully.');;

@@ -30,19 +30,19 @@ class Index extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-				$where = array('du_email' => $post['userid'],
-								'du_password' => sha1($post['password']),
-								'du_role !=' => 'u'
+				$where = array('EmailId' => $post['userid'],
+								'Password' => sha1($post['password']),
+								'Role !=' => 'u'
 							 );
 				$user = $this->common_model->selectData(TBLUSER, '*', $where);
 				if (count($user) > 0) {
 					# create session
-					$data = array('id' => $user[0]->du_autoid,
-									'uname' => $user[0]->du_uname,
-									'contact' => $user[0]->du_contact,
-									'email' => $user[0]->du_email,
-									'role' => $user[0]->du_role,
-									'create_date' => $user[0]->du_createdate
+					$data = array('id' => $user[0]->id,
+									'uname' => $user[0]->Firstname,
+									'contact' => $user[0]->Mobileno,
+									'email' => $user[0]->EmailId,
+									'role' => $user[0]->Role,
+									'create_date' => $user[0]->Createdate
 								);
 					$this->session->set_userdata('user_session',$data);
 					redirect('admin/dashboard');
@@ -81,15 +81,15 @@ class Index extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-				$where = array('du_email' => trim($post['email']));
+				$where = array('EmailId' => trim($post['email']));
 				$user = $this->common_model->selectData(TBLUSER, '*', $where);
 				if (count($user) > 0) {
 
-					$newpassword = random_string('alnum', 8);
-					$data = array('du_password' => sha1($newpassword));
+					echo $newpassword = random_string('alnum', 8);
+					$data = array('Password' => sha1($newpassword));
 					$upid = $this->common_model->updateData(TBLUSER,$data,$where);
 
-					$login_details = array('username' => $user[0]->du_uname,'password' => $newpassword);
+					$login_details = array('username' => $user[0]->Firstname,'password' => $newpassword);
 					#$emailTpl = $this->get_forgotpassword_tpl($login_details);
 
 					$emailTpl = $this->load->view('email_templates/admin_forgot_password', '', true);
@@ -98,7 +98,7 @@ class Index extends CI_Controller {
 					$replace = array($login_details['username'], $login_details['password']);
 					$emailTpl = str_replace($search, $replace, $emailTpl);
 
-					$ret = sendEmail($user[0]->du_email, SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
+					$ret = sendEmail($user[0]->EmailId, SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
 					if ($ret) {
 						$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Login details sent successfully.'

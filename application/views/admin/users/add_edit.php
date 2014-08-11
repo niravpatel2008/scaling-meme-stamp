@@ -21,31 +21,43 @@
                     }
                 ?>
                 <form id='user_form' name='user_form' role="form" action="" method="post">
-                    <div class="form-group <?=(@$error_msg['user_name'] != '')?'has-error':'' ?>">
+                    <div class="form-group <?=(@$error_msg['Firstname'] != '')?'has-error':'' ?>">
                         <?php
-                            if(@$error_msg['user_name'] != ''){
+                            if(@$error_msg['Firstname'] != ''){
                         ?>
-                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['user_name']?></label><br/>
+                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['Firstname']?></label><br/>
                         <?php
                             }
                         ?>
-                        <label>User Name:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control validate[required]" name="user_name" id="user_name" value="<?=@$user[0]->du_uname?>" >
+                        <label>First Name:</label>
+                        <input type="text" placeholder="Enter ..." class="form-control validate[required]" name="Firstname" id="Firstname" value="<?=@$user[0]->Firstname?>" >
                     </div>
-                    <div class="form-group <?=(@$error_msg['email'] != '')?'has-error':'' ?>">
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input type="text" placeholder="Enter ..." class="form-control" name="Lastname" id="Lastname" value="<?=@$user[0]->Lastname?>" >
+                    </div>
+                    <div class="form-group <?=(@$error_msg['EmailId'] != '')?'has-error':'' ?>">
                         <?php
-                            if(@$error_msg['email'] != ''){
+                            if(@$error_msg['EmailId'] != ''){
                         ?>
-                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['email']?></label><br/>
+                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['EmailId']?></label><br/>
                         <?php
                             }
                         ?>
-                        <label for="email">Email address:</label>
-                        <input type="email" placeholder="Enter email" id="email" class="form-control validate[required,custom[email]]" name="email" value="<?=@$user[0]->du_email?>" >
+                        <label for="EmailId">Email address:</label>
+                        <input type="EmailId" placeholder="Enter email" id="EmailId" class="form-control validate[required,custom[email]]" name="EmailId" value="<?=@$user[0]->EmailId?>" >
                     </div>
                     <div class="form-group">
                         <label>Contact:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control validate[required,custom[phone]" name="contact" id="contact" value="<?=@$user[0]->du_contact?>">
+                        <input type="text" placeholder="Enter ..." class="form-control validate[required,custom[phone]" name="Mobileno" id="Mobileno" value="<?=@$user[0]->Mobileno?>">
+                    </div>
+                    <div class="form-group">
+                        <label>City:</label>
+                        <input type="text" placeholder="Enter ..." class="form-control" name="City" id="City" value="<?=@$user[0]->City?>">
+                    </div>
+                    <div class="form-group">
+                        <label>State:</label>
+                        <input type="text" placeholder="Enter ..." class="form-control" name="State" id="State" value="<?=@$user[0]->State?>">
                     </div>
                     <div class="form-group <?=(@$error_msg['role'] != '')?'has-error':'' ?>">
                         <?php
@@ -56,21 +68,35 @@
                             }
                         ?>
                         <label>Role</label>
-                        <select class="form-control" name="role" id="role">
+                        <select class="form-control validate[required]" name="Role" id="Role">
                             <option value="">Select</option>
-                            <option value="a" <?=(@$user[0]->du_role == 'a')?'selected':''?> >Admin</option>
-                            <option value="m" <?=(@$user[0]->du_role == 'm')?'selected':''?> >Moderator</option>
-                            <option value="d" <?=(@$user[0]->du_role == 'd')?'selected':''?> >Dealer</option>
-                            <option value="u" <?=(@$user[0]->du_role == 'u')?'selected':''?> >User</option>
+                            <option value="a" <?=(@$user[0]->Role == 'a')?'selected':''?> >Admin</option>
+                            <option value="u" <?=(@$user[0]->Role == 'u')?'selected':''?> >User</option>
+                        </select>
+                    </div>
+					<div class="form-group <?=(@$error_msg['Status'] != '')?'has-error':'' ?>">
+                        <?php
+                            if(@$error_msg['Status'] != ''){
+                        ?>
+                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['Status']?></label><br/>
+                        <?php
+                            }
+                        ?>
+                        <label>Status</label>
+                        <select class="form-control validate[required]" name="Status" id="Status">
+                            <option value="">Select</option>
+                            <option value="Active" <?=(@$user[0]->Status == 'Active')?'selected':''?> >Active</option>
+                            <option value="Inactive" <?=(@$user[0]->Status == 'Inactive')?'selected':''?> >Inactive</option>
+                            <option value="Block" <?=(@$user[0]->Status == 'Block')?'selected':''?> >Block</option>
                         </select>
                     </div>
 					<div class="form-group">
                         <label>Password:</label>
-                        <input type="password" placeholder="Password" class="form-control validate[minSize[5],maxSize[15]]" name="password" id="password">
+                        <input type="password" placeholder="Password" class="form-control validate[minSize[5],maxSize[15]]" name="Password" id="Password">
                     </div>
 					<div class="form-group">
                         <label>Repeat Password:</label>
-                        <input type="password" placeholder="Repeat Password" class="form-control validate[equals[password]]" name="re_password" id="re_password">
+                        <input type="password" placeholder="Repeat Password" class="form-control validate[equals[Password]]" name="re_Password" id="re_Password">
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>

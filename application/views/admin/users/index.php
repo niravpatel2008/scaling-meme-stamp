@@ -32,20 +32,24 @@
 						<table id="usersTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>Name</th>
-									<th>Role</th>
-									<th>Contact</th>
+									<th>First Name</th>
+									<th>Last Name</th>
 									<th>Email</th>
+									<th>Mobile</th>
+									<th>City</th>
+									<th>Status</th>
 									<th>Created At</th>
 									<th>Action</th>
 								</tr>
 							</thead>
 							<tfoot>
 								<tr>
-									<th>Name</th>
-									<th>Role</th>
-									<th>Contact</th>
+									<th>First Name</th>
+									<th>Last Name</th>
 									<th>Email</th>
+									<th>Mobile</th>
+									<th>City</th>
+									<th>Status</th>
 									<th>Created At</th>
 									<th>Action</th>
 								</tr>
