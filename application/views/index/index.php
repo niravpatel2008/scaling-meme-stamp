@@ -1,4 +1,20 @@
-
+<script>
+$(document).ready(function(){
+	<?php if(isset($userdetailError) && $userdetailError==true) { ?>
+		$("#Proceed").trigger('click');
+	<?php } ?>
+});
+</script>
+<style>
+.errorMsg{
+color:red;
+padding:0;
+margin:0 !important;
+font-size:18px;
+font-weight:bold;
+height:30px;
+}
+</style>
 <!-- Intro -->
 <section id="top" class="one dark cover">
 	<div class="container">
@@ -7,14 +23,21 @@
 			<h2 class="alt">Welcome to Ezcell</h2>
 		</header>
 		<div class="row">	
-			<div class="6u">
+			<?php if(form_error('firstname')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('firstname') ?> </div> <?php } ?>
+			<?php if(form_error('lastname')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('lastname') ?> </div><?php } ?>
+			<?php if(form_error('emailId')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('emailId') ?> </div><?php } ?>
+			<?php if(form_error('state')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('state') ?> </div><?php } ?>
+			<?php if(form_error('city')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('city') ?> </div><?php } ?>
+			<?php if(form_error('password')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('password') ?> </div><?php } ?>
+			<?php if(form_error('repassword')!='') { ?><div class="12u errorMsg" id="errorMsg"> <?php echo form_error('repassword') ?> </div><?php } ?>
+			<div class="8u" id="userDetail">
 			<table>
 			<tr>
 				<td  align="left">
 					<label>Prepaid Mobile No : </label>
 				</td>
 				<td align="left">
-					<input type="text" name="mobileno" id="mobileno"/>
+					<input type="number" name="mobileno" id="mobileno"/>
 				</td>
 			</tr>
 			<tr>
@@ -35,22 +58,22 @@
 					<label>Recharge amount : </label>
 				</td>
 				<td align="left">
-					<input type="text" name="amount" id="amount"/>
+					<input type="number" name="amount" id="amount"/>
 				</td>
 			</tr>
 			<tr>
 				<td  colspan="2" align="center"> 
-					<input type="submit" name="Proceed" value="Proceed">
+					<input type="button" name="Proceed" id="Proceed" value="Proceed">
 				</td>
 			</tr>
 			</table>
 			</div>
-			<div class="6u">
+			<!--div class="4u">
 				here we display google add.
 			</div>
 			<div class="12u">
 				here we display google add.
-			</div>
+			</div-->
 		</div>
 		<footer>
 			

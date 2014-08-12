@@ -124,3 +124,7 @@
 	});
 
 })(jQuery);
+
+jQuery(':input[type=number]').on('mousewheel', function(e){
+    jQuery(this).blur(); 
+});
