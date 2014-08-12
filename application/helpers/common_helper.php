@@ -111,5 +111,23 @@
 	{
 		return str_replace(array("/","(",")","&",),"-",$str);
 	}
+	function callrechargeAPI($postdata)
+	{
+		$opts = array('http' =>
+				array(
+					'method' => 'GET',
+					'header'  => 'Content-type: application/x-www-form-urlencoded',
+					'content' => $postdata
+				)
+			);
+			$context = stream_context_create($opts);
+			
+			$result = file_get_contents("http://roundpay.in/API/APIService.aspx", false, $context);
+			
+			$xml = simplexml_load_string($result);
+			$json = json_encode($xml);
+			$array = json_decode($json,TRUE);
+			return $array;
+	}
 
 ?>

@@ -4,10 +4,59 @@ class Index extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-    }
-
+		$this->front_session = $this->session->userdata('front_session');
+		
+		#pr($this->front_session,1);
+    } 
 	public function index()
 	{
+				
+		$post = $this->input->post();
+		if($post)
+		{
+			#$is_unique_username = $this->common_model->isUnique(DEAL_USER, 'uname', trim($post['uname']));
+			#$is_unique_email = $this->common_model->isUnique(DEAL_USER, 'email', trim($post['email']));
+			
+			$this->load->library('form_validation');
+			#$this->form_validation->set_error_delimiters('<label class="form-error-msg"><i class="fa fa-times-circle-o"></i>', '</label><br/>');
+			$this->form_validation->set_rules('firstname', 'Firstname', 'trim|required');
+			$this->form_validation->set_rules('lastname', 'Lastname', 'trim|required');
+			$this->form_validation->set_rules('emailId', 'Email Address', 'trim|required|valid_email');
+			$this->form_validation->set_rules('state', 'State', 'trim|required');
+			$this->form_validation->set_rules('city', 'City', 'trim|required');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[repassword]');
+			$this->form_validation->set_rules('repassword', 'Repeat Password', 'required');
+			
+			if ($this->form_validation->run()) {
+				$insertdata = array('Firstname' => $post['firstname'],
+								'Lastname' => $post['lastname'],
+								'Role' => 'u',
+								'EmailId' => $post['emailId'],
+								'Mobileno' => $this->front_session['mobileno'],
+								'Password' => md5($post['password']),
+								'City' => $post['city'],
+								'State' => $post['state'],
+								'Status' => 'Guest'
+							);
+				$ret = $this->common_model->insertData(TBLUSER, $insertdata);
+				if($ret)
+				{
+					$postdata = http_build_query(array('userid' => 'UserId' // Login UserId
+					, 'pass' => 'Pass' // Login password
+					, 'mob' => '3265985421' // Mobile number to recharge
+					, 'opt' => '1' // Operator code given by API provider
+					, 'amt' => '10' // Amount to recharge
+					, 'agentid' => '12335' // Our unique Id
+					  ));
+					$result=callrechargeAPI($postdata);
+					pr($result,1);
+				}
+			}
+			else
+			{
+				$data['userdetailError']=true;
+			}
+		}
 		$data['view'] = "index";
 		$this->load->view('content', $data);
 	}
@@ -25,6 +74,40 @@ class Index extends CI_Controller {
 	{
 		$data['view'] = "contactus";
 		$this->load->view('content', $data);
+	}
+	public function getdetail()
+	{
+		$post = $this->input->post();
+		$is_error=0;
+		
+		if(trim($post['Mn'])=='' && !isset($this->front_session['mobileno']))
+		{
+			$is_error=1;
+		}
+		if(trim($post['Pr'])=='' && !isset($this->front_session['provider']))
+		{
+			
+			$is_error=1;
+		}
+		if(trim($post['Rm'])=='' && !isset($this->front_session['amount']))
+		{
+			
+			$is_error=1;
+		}
+		
+		if($is_error==0)
+		{
+			$session_data=array('mobileno'=>$post['Mn']
+								,"provider"=>$post['Pr']
+								,"amount"=>$post['Rm']);
+			$this->session->set_userdata('front_session',$session_data);
+			$data['view'] = "";
+			$this->load->view('index/getdetail', $data);
+		}
+		else
+		{
+			echo "Error";
+		}
 	}
 }
 

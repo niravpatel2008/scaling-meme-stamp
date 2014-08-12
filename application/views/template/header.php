@@ -15,5 +15,7 @@
 		<script>
 			var baseurl='<?=base_url()?>';
 		</script>
+		<!--[if lte IE 8]><script src="<?=public_path()?>css/ie/html5shiv.js"></script><![endif]-->
+		<script src="<?=public_path()?>js/jquery.min.js"></script>
 	</head>
 <body>
