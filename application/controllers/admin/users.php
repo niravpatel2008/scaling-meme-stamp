@@ -151,7 +151,7 @@ class Users extends CI_Controller {
 				$e_flag=1;
 			}
 			else{
-				$is_unique_email = $this->common_model->isUnique(TBLUSER, 'Mobileno', trim($post['Mobileno']));
+				$is_unique_email = $this->common_model->isUnique(TBLUSER, 'Mobileno', trim($post['Mobileno']),"id <> ". $id);
 				if (!$is_unique_email) {
 					$error['Mobileno'] = 'Mobile number already exists.';
 					$e_flag=1;
@@ -200,6 +200,7 @@ class Users extends CI_Controller {
 							);
 				if($psFlas)
 					$data['Password'] = sha1(trim($post['Password']));
+				
 				$ret = $this->common_model->updateData(TBLUSER, $data, $where);
 
 				if ($ret > 0) {
