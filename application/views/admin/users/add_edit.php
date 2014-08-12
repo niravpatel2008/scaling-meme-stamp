@@ -47,7 +47,14 @@
                         <label for="EmailId">Email address:</label>
                         <input type="EmailId" placeholder="Enter email" id="EmailId" class="form-control validate[required,custom[email]]" name="EmailId" value="<?=@$user[0]->EmailId?>" >
                     </div>
-                    <div class="form-group">
+                    <div class="form-group <?=(@$error_msg['Mobileno'] != '')?'has-error':'' ?>">
+						<?php
+                            if(@$error_msg['Mobileno'] != ''){
+                        ?>
+                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['Mobileno']?></label><br/>
+                        <?php
+                            }
+                        ?>
                         <label>Contact:</label>
                         <input type="text" placeholder="Enter ..." class="form-control validate[required,custom[phone]" name="Mobileno" id="Mobileno" value="<?=@$user[0]->Mobileno?>">
                     </div>
