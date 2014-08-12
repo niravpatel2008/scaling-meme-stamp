@@ -40,8 +40,26 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /**
 * Custom constants
 */
-define('ADMIN', 'admin');
-define('DOC_ROOT',  $_SERVER["DOCUMENT_ROOT"]."/recharge/");
+define('DOC_ROOT',	$_SERVER["DOCUMENT_ROOT"]."/recharge/");
+define('DOC_ROOT_PROFILE_IMG',  "./uploads/profile_images/");
+
+
+define('ADMIN',	'admin');
+
+/* TABLES*/
+define('STATES_CITIES',	'states_cities');
+define('TBLBLOCKIP',	'tblblockip');
+define('TBLCIRCLE',	'tblcircle');
+define('TBLCOUPON',	'tblcoupon');
+define('TBLCREDITCARDPROFILE',	'tblcreditcardprofile');
+define('TBLPAYMENTHISTORY',	'tblpaymenthistory');
+define('TBLREDEEMPRODUCT',	'tblredeemproduct');
+define('TBLREFERRAL',	'tblreferral');
+define('TBLREWARD',	'tblreward');
+define('TBLSTATES',	'tblstates');
+define('TBLTRANSACTIONHISTORY',	'tbltransactionhistory');
+define('TBLUSER',	'tbluser');
+define('TBLUSERLOGINHISTORY',	'tbluserloginhistory');
 
 
 /**
