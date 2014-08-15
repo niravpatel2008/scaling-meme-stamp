@@ -1,4 +1,4 @@
-<h3>Login</h3>
+<h3>Sign in to continue</h3>
 <form id="login_form" action="" method="post">
     <div id="flash_msg"><?=@$error_msg?></div>
     <table>
@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td  colspan="2" align="center">
-                <input type="submit" name="login" id="login" value="Login">
+                <input type="submit" name="login" id="login" value="Sign in">
             </td>
         </tr>
     </table>

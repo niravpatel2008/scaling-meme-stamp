@@ -41,7 +41,9 @@
 $route['default_controller'] = "index";
 $route['404_override'] = '';
 
-$route['login'] = "index/login";
+$route['signin'] = "index/signin";
+$route['signout'] = "index/signout";
+
 
 $route['admin/forgotpassword'] = "admin/index/forgotpassword";
 $route['admin'] = "admin/index";
