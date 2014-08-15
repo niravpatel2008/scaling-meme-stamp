@@ -111,12 +111,12 @@ class Index extends CI_Controller {
 		}
 	}
 
-	public function login()
+	public function signin()
 	{
 
 		$post = $this->input->post();
 		if ($post) {
-			$this->form_validation->set_rules('mobile', 'Mobile', 'trim|required');
+			$this->form_validation->set_rules('mobile', 'Mobile', 'trim|required|integer');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
 			if ($this->form_validation->run()) {
@@ -142,6 +142,14 @@ class Index extends CI_Controller {
 		$data['view'] = "login";
 		$this->load->view('content', $data);
 	}
+
+
+	public function signout()
+	{
+		$this->session->sess_destroy();
+		redirect(base_url());
+	}
+
 }
 
 /* End of file index.php */
