@@ -1,18 +1,11 @@
 
-$("#Proceed").on("click",function(){
+$("#btnApply").on("click",function(){
 	$.ajax({
 		type: 'post',
-		url: baseurl+'index/getdetail',
-		data: 'Mn='+$('#mobileno').val()+"&Pr="+$('#provider').val()+"&Rm="+$('#amount').val(),
+		url: baseurl+'index/applycoupon',
+		data: 'Code='+$('#coupon').val(),
 		success: function (data) {
-			if(data!='Error')
-			{
-				$("#userDetail").html(data);
-			}
-			else
-			{
-				$("#userDetail").html("There is error in your data");
-			}
+			alert(data);
 		}
 	});
 });

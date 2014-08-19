@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="<?=public_path()?>css/skel.css" />
 		<link rel="stylesheet" href="<?=public_path()?>css/style.css" />
 		<link rel="stylesheet" href="<?=public_path()?>css/style-wide.css" />
-		
+		<link rel="stylesheet" href="<?=public_path()?>css/bootstrap.min.css"/>
 		<!--[if lte IE 9]><link rel="stylesheet" href="<?=public_path()?>css/ie/v9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="<?=public_path()?>css/ie/v8.css" /><![endif]-->
 		<script>

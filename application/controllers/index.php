@@ -20,23 +20,24 @@ class Index extends CI_Controller {
 
 
 			#$this->form_validation->set_error_delimiters('<label class="form-error-msg"><i class="fa fa-times-circle-o"></i>', '</label><br/>');
-			$this->form_validation->set_rules('firstname', 'Firstname', 'trim|required');
-			$this->form_validation->set_rules('lastname', 'Lastname', 'trim|required');
+			$this->form_validation->set_rules('mobileno', 'Mobile Number', 'trim|required');
+			$this->form_validation->set_rules('provider', 'Provider', 'trim|required');
+			$this->form_validation->set_rules('amount', 'Amount', 'trim|required');
+			$this->form_validation->set_rules('username', 'Name', 'trim|required');
 			$this->form_validation->set_rules('emailId', 'Email Address', 'trim|required|valid_email');
-			$this->form_validation->set_rules('state', 'State', 'trim|required');
-			$this->form_validation->set_rules('city', 'City', 'trim|required');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[repassword]');
-			$this->form_validation->set_rules('repassword', 'Repeat Password', 'required');
+			#$this->form_validation->set_rules('state', 'State', 'trim|required');
+			#$this->form_validation->set_rules('city', 'City', 'trim|required');
+			#$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[repassword]');
+			#$this->form_validation->set_rules('repassword', 'Repeat Password', 'required');
 
 			if ($this->form_validation->run()) {
-				$insertdata = array('Firstname' => $post['firstname'],
-								'Lastname' => $post['lastname'],
+				$insertdata = array('Firstname' => $post['username'],
 								'Role' => 'u',
 								'EmailId' => $post['emailId'],
-								'Mobileno' => $this->front_session['mobileno'],
+								'Mobileno' => $post['mobileno'],
 								'Password' => md5($post['password']),
-								'City' => $post['city'],
-								'State' => $post['state'],
+								'City' => '',
+								'State' => '',
 								'Status' => 'Guest'
 							);
 				$ret = $this->common_model->insertData(TBLUSER, $insertdata);
@@ -44,9 +45,9 @@ class Index extends CI_Controller {
 				{
 					$postdata = http_build_query(array('userid' => 'UserId' // Login UserId
 					, 'pass' => 'Pass' // Login password
-					, 'mob' => '3265985421' // Mobile number to recharge
-					, 'opt' => '1' // Operator code given by API provider
-					, 'amt' => '10' // Amount to recharge
+					, 'mob' => $post['mobileno'] // Mobile number to recharge
+					, 'opt' => $post['provider'] // Operator code given by API provider
+					, 'amt' => $post['amount'] // Amount to recharge
 					, 'agentid' => '12335' // Our unique Id
 					  ));
 					$result=callrechargeAPI($postdata);
@@ -75,6 +76,24 @@ class Index extends CI_Controller {
 	{
 		$data['view'] = "contactus";
 		$this->load->view('content', $data);
+	}
+	public function applycoupon()
+	{
+		$post = $this->input->post();
+		if($post)
+		{
+			$coupon=$post['Code'];
+			$codeData=$this->common_model->checkCoupon($coupon);
+			if(!empty($codeData))
+			{
+				pr($codeData);
+			}
+			else
+			{
+				echo "Wrong coupon code";
+			}
+		}
+		exit;
 	}
 	public function getdetail()
 	{
