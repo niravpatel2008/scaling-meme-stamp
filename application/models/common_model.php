@@ -127,10 +127,10 @@ class common_model extends CI_Model{
 		$this->db->where('Code',$code);
 		
 		$query = $this->db->get();
-		$data = $query->result_array();
+		$data =$query->row();
 		$query->free_result();
 
-		return ($data > 0)?FALSE:TRUE;
+		return $data;
 	}
 
 }

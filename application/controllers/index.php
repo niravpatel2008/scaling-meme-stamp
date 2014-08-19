@@ -43,6 +43,9 @@ class Index extends CI_Controller {
 				$ret = $this->common_model->insertData(TBLUSER, $insertdata);
 				if($ret)
 				{
+					$session_data=array('topupAmount'=>$post['amount']);
+					$this->session->set_userdata('front_session',$session_data);
+					
 					$postdata = http_build_query(array('userid' => 'UserId' // Login UserId
 					, 'pass' => 'Pass' // Login password
 					, 'mob' => $post['mobileno'] // Mobile number to recharge
@@ -83,14 +86,36 @@ class Index extends CI_Controller {
 		if($post)
 		{
 			$coupon=$post['Code'];
+			$coupon='test';
+			$amount='50';
 			$codeData=$this->common_model->checkCoupon($coupon);
 			if(!empty($codeData))
 			{
-				pr($codeData);
+				if($codeData->Code==$coupon)
+				{
+					if($codeData->Type=='TopUp')
+					{
+						$paymentAmt=$amount-$codeData->Amount;
+						$session_data=array('topupAmount'=>$paymentAmt);
+						$this->session->set_userdata('front_session',$session_data);
+						$data=array('actualAmt'=>$amount,'paymentAmt'=>$paymentAmt,'status'=>"Success");
+						echo json_encode($data);
+					}
+					else if ($codeData->Type=='Offer')
+					{
+						
+					}
+				}
+				else
+				{
+					$data=array('status'=>"Error",'Message'=>"There is something wrong");
+					echo json_encode($data);
+				}
 			}
 			else
 			{
-				echo "Wrong coupon code";
+				$data=array('status'=>"Error",'Message'=>"Wrong Coupon Code");
+				echo json_encode($data);
 			}
 		}
 		exit;
