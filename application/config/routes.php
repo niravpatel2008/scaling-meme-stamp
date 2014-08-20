@@ -43,6 +43,8 @@ $route['404_override'] = '';
 
 $route['signin'] = "index/signin";
 $route['signout'] = "index/signout";
+$route['aboutus'] = "index/aboutus";
+$route['contactus'] = "index/contactus";
 
 
 $route['admin/forgotpassword'] = "admin/index/forgotpassword";

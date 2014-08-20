@@ -20,7 +20,7 @@
 						</a>
 					</h1>
 					<p>
-						<?=$user_Data[0]->EmailId?><br/>
+						<a href="<?=base_url()?>profile/changepassword">Change password</a><br/>
 						<a href="<?=base_url()?>signout">Sign out</a>
 					</p>
 				<?php
@@ -37,10 +37,10 @@
 			<!-- Nav -->
 			<nav id="nav">
 				<ul>
-					<li><a href="<?=base_url()?>index/index" class="skel-layers-ignoreHref"><span class="icon fa-home">Home</span></a></li>
+					<li><a href="<?=base_url()?>" class="skel-layers-ignoreHref"><span class="icon fa-home">Home</span></a></li>
 					<li><a href="<?=base_url()?>index/articals" class="skel-layers-ignoreHref"><span class="icon fa-th">Articals</span></a></li>
-					<li><a href="<?=base_url()?>index/aboutus" class="skel-layers-ignoreHref"><span class="icon fa-user">About Me</span></a></li>
-					<li><a href="<?=base_url()?>index/contactus" class="skel-layers-ignoreHref"><span class="icon fa-envelope">Contact</span></a></li>
+					<li><a href="<?=base_url()?>aboutus" class="skel-layers-ignoreHref"><span class="icon fa-user">About Me</span></a></li>
+					<li><a href="<?=base_url()?>contactus" class="skel-layers-ignoreHref"><span class="icon fa-envelope">Contact</span></a></li>
 				</ul>
 			</nav>
 		</div>

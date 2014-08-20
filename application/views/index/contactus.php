@@ -4,11 +4,11 @@
 	<div class="container">
 
 		<header>
-			<h2>Contact</h2>
+			<h2>Contact Us</h2>
 		</header>
 
-		<p>For any query ytou can contact us.</p>
-		
+		<p>We are always happy to help and appreciate your feedback.</p>
+
 		<form method="post" action="#">
 			<div class="row half">
 				<div class="6u"><input type="text" name="name" placeholder="Name" /></div>
@@ -27,5 +27,5 @@
 		</form>
 	</div>
 </section>
-			
-			
+
+
