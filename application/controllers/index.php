@@ -43,18 +43,59 @@ class Index extends CI_Controller {
 				$ret = $this->common_model->insertData(TBLUSER, $insertdata);
 				if($ret)
 				{
-					$session_data=array('topupAmount'=>$post['amount']);
-					$this->session->set_userdata('front_session',$session_data);
+					if(isset($this->front_session['couponCode']) && $this->front_session['couponCode']!=0)
+					{
+						
+					}
+					else
+					{
+						$session_data=array('topupAmount'=>$post['amount'],'actualAmount'=>$post['amount']);
+						$this->session->set_userdata('front_session',$session_data);
+					}
+					$this->front_session = $this->session->userdata('front_session');
 					
-					$postdata = http_build_query(array('userid' => 'UserId' // Login UserId
-					, 'pass' => 'Pass' // Login password
-					, 'mob' => $post['mobileno'] // Mobile number to recharge
-					, 'opt' => $post['provider'] // Operator code given by API provider
-					, 'amt' => $post['amount'] // Amount to recharge
-					, 'agentid' => '12335' // Our unique Id
-					  ));
-					$result=callrechargeAPI($postdata);
-					pr($result,1);
+					if(isset($this->front_session['topupAmount']) && isset($this->front_session['actualAmount']))
+					{
+						$uniqueNo=rand ( 10000 , 999999 );
+						$inserttrans = array('tblUser_id' => $ret,
+								'tblCircle_id' => $post['provider'],
+								'tblState_id' => '',
+								'Mobileno' => $post['mobileno'],
+								'APIrequestId' => $uniqueNo,
+								'APItransactionId' => '',
+								'APIresponcecode' => '',
+								'Amount' => $this->front_session['actualAmount'],
+								'Userip' => $_SERVER['REMOTE_ADDER'],
+								'Flag' => '',
+								'Transactiondetail' => '',
+								'Status' => 'Pending'
+							);
+						$trans = $this->common_model->insertData(TBLTRANSACTIONHISTORY, $inserttrans);
+						
+						$insertpaymenttrans = array('tblTransactionhistory_id' => $trans,
+								'tblUser_id' => $post['provider'],
+								'tblCoupon_id' => '',
+								'Requestid' => $post['mobileno'],
+								'Transactionid' => $uniqueNo,
+								'Token' => '',
+								'Amount' => $this->front_session['actualAmount'],
+								'Userip' => $_SERVER['REMOTE_ADDER'],
+								'Flag' => '',
+								'Paymentdetail' => '',
+								'Status' => 'Pending'
+							);
+						$paymenttrans = $this->common_model->insertData(TBLPAYMENTHISTORY, $insertpaymenttrans);
+						
+						$postdata = http_build_query(array('userid' => 'UserId' // Login UserId
+						, 'pass' => 'Pass' // Login password
+						, 'mob' => $post['mobileno'] // Mobile number to recharge
+						, 'opt' => $post['provider'] // Operator code given by API provider
+						, 'amt' => $post['amount'] // Amount to recharge
+						, 'agentid' => $uniqueNo // Our unique Id
+						  ));
+						$result=callrechargeAPI($postdata);
+						pr($result,1);
+					}
 				}
 			}
 			else
@@ -86,8 +127,7 @@ class Index extends CI_Controller {
 		if($post)
 		{
 			$coupon=$post['Code'];
-			$coupon='test';
-			$amount='50';
+			$amount=$post['Amt'];
 			$codeData=$this->common_model->checkCoupon($coupon);
 			if(!empty($codeData))
 			{
@@ -95,8 +135,15 @@ class Index extends CI_Controller {
 				{
 					if($codeData->Type=='TopUp')
 					{
-						$paymentAmt=$amount-$codeData->Amount;
-						$session_data=array('topupAmount'=>$paymentAmt);
+						if($amount>$codeData->Amount)
+						{
+							$paymentAmt=$amount-$codeData->Amount;
+						}
+						else
+						{
+							$paymentAmt=0;
+						}
+						$session_data=array('topupAmount'=>$paymentAmt,'actualAmount'=>$amount,'couponCode'=>$codeData->id);
 						$this->session->set_userdata('front_session',$session_data);
 						$data=array('actualAmt'=>$amount,'paymentAmt'=>$paymentAmt,'status'=>"Success");
 						echo json_encode($data);

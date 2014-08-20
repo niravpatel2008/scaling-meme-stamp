@@ -1,8 +1,6 @@
 <script>
 $(document).ready(function(){
-	<?php if(isset($userdetailError) && $userdetailError==true) { ?>
-		$("#Proceed").trigger('click');
-	<?php } ?>
+	
 });
 </script>
 <style>
