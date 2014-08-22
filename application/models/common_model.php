@@ -114,6 +114,24 @@ class common_model extends CI_Model{
 
 		return ($data > 0)?FALSE:TRUE;
 	}
+	
+	/**
+	* check unique fields
+	*/
+	public function getId($table, $field, $value,$where = "")
+	{
+		$this->db->select('*');
+		$this->db->from($table);
+		$this->db->where($field,$value);
+		if ($where != "")
+			$this->db->where($where);
+		$query = $this->db->get();
+		#$data = $query->num_rows();
+		$data =$query->row();
+		
+		$query->free_result();
+		return $data->id;
+	}
 
 	/**
 	* check coupon code fields

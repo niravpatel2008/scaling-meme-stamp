@@ -15,9 +15,7 @@ class Index extends CI_Controller {
 		$post = $this->input->post();
 		if($post)
 		{
-			#$is_unique_username = $this->common_model->isUnique(DEAL_USER, 'uname', trim($post['uname']));
-			#$is_unique_email = $this->common_model->isUnique(DEAL_USER, 'email', trim($post['email']));
-
+			$isUnique=$this->common_model->isUnique(TBLUSER, 'mobileno', trim($post['mobileno']));
 
 			#$this->form_validation->set_error_delimiters('<label class="form-error-msg"><i class="fa fa-times-circle-o"></i>', '</label><br/>');
 			$this->form_validation->set_rules('mobileno', 'Mobile Number', 'trim|required');
@@ -27,20 +25,31 @@ class Index extends CI_Controller {
 			$this->form_validation->set_rules('emailId', 'Email Address', 'trim|required|valid_email');
 			#$this->form_validation->set_rules('state', 'State', 'trim|required');
 			#$this->form_validation->set_rules('city', 'City', 'trim|required');
-			#$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[repassword]');
-			#$this->form_validation->set_rules('repassword', 'Repeat Password', 'required');
+			if($isUnique)
+			{
+				$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[repassword]');
+				$this->form_validation->set_rules('repassword', 'Repeat Password', 'required');
+			}
 
 			if ($this->form_validation->run()) {
-				$insertdata = array('Firstname' => $post['username'],
-								'Role' => 'u',
-								'EmailId' => $post['emailId'],
-								'Mobileno' => $post['mobileno'],
-								'Password' => md5($post['password']),
-								'City' => '',
-								'State' => '',
-								'Status' => 'Guest'
-							);
-				$ret = $this->common_model->insertData(TBLUSER, $insertdata);
+				
+				if($isUnique)
+				{
+					$insertdata = array('Firstname' => $post['username'],
+									'Role' => 'u',
+									'EmailId' => $post['emailId'],
+									'Mobileno' => $post['mobileno'],
+									'Password' => md5($post['password']),
+									'City' => '',
+									'State' => '',
+									'Status' => 'Guest'
+								);
+					$ret = $this->common_model->insertData(TBLUSER, $insertdata);
+				}
+				else
+				{
+					$ret=$this->common_model->getId(TBLUSER, 'mobileno', trim($post['mobileno']));
+				}
 				if($ret)
 				{
 					if(isset($this->front_session['couponCode']) && $this->front_session['couponCode']!=0)
@@ -65,36 +74,100 @@ class Index extends CI_Controller {
 								'APItransactionId' => '',
 								'APIresponcecode' => '',
 								'Amount' => $this->front_session['actualAmount'],
-								'Userip' => $_SERVER['REMOTE_ADDER'],
+								'Userip' => $_SERVER['REMOTE_ADDR'],
 								'Flag' => '',
 								'Transactiondetail' => '',
 								'Status' => 'Pending'
 							);
-						$trans = $this->common_model->insertData(TBLTRANSACTIONHISTORY, $inserttrans);
+							$trans = $this->common_model->insertData(TBLTRANSACTIONHISTORY, $inserttrans);
 						
-						$insertpaymenttrans = array('tblTransactionhistory_id' => $trans,
-								'tblUser_id' => $post['provider'],
-								'tblCoupon_id' => '',
-								'Requestid' => $post['mobileno'],
-								'Transactionid' => $uniqueNo,
-								'Token' => '',
-								'Amount' => $this->front_session['actualAmount'],
-								'Userip' => $_SERVER['REMOTE_ADDER'],
-								'Flag' => '',
-								'Paymentdetail' => '',
-								'Status' => 'Pending'
-							);
-						$paymenttrans = $this->common_model->insertData(TBLPAYMENTHISTORY, $insertpaymenttrans);
+							$insertpaymenttrans = array('tblTransactionhistory_id' => $trans,
+									'tblUser_id' => $post['provider'],
+									'tblCoupon_id' => '',
+									'Requestid' => '',
+									'Transactionid' => '',
+									'Token' => '',
+									'Amount' => $this->front_session['topupAmount'],
+									'Userip' => $_SERVER['REMOTE_ADDR'],
+									'Paymentdetail' => '',
+									'Status' => 'Pending'
+								);
+							$paymenttrans = $this->common_model->insertData(TBLPAYMENTHISTORY, $insertpaymenttrans);
+							
+							
+							//=========================================================================
+							//Payment Process will be here
+							//=========================================================================
+							
+							
+							$postdata = http_build_query(array('userid' => '5773646' // Login UserId
+							, 'pass' => '5590' // Login password
+							, 'mob' => $post['mobileno'] // Mobile number to recharge
+							, 'opt' => $post['provider'] // Operator code given by API provider
+							, 'amt' => $post['amount'] // Amount to recharge
+							, 'agentid' => $uniqueNo // Our unique Id
+							  ));
+							$result=callrechargeAPI($postdata);
+							if($result['Status']=="SUCCESS")
+							{
+								echo "user Recharge successfull";
+								$updatetrans = array(
+									'APItransactionId' => $result['Tid'],
+									'APIresponcecode' => 'SUCCESS',
+									'Transactiondetail' => json_decode($result),
+									'Status' => 'Success'
+								);
+								$updatetrans = $this->common_model->updateData(TBLTRANSACTIONHISTORY, $updatetrans, 'id = '.$trans);
+									
+							}
+							else if($result['Status']=="FAILED")
+							{
+								echo "user Recharge Fail due to ".$result['STATUS'];
+								$updatetrans = array(
+									'APItransactionId' => $result['Tid'],
+									'APIresponcecode' => 'FAILED',
+									'Transactiondetail' => json_decode($result),
+									'Status' => 'Fail'
+								);
+								$trans = $this->common_model->updateData(TBLTRANSACTIONHISTORY, $updatetrans, 'id = '.$trans);
+								//=========================================================================
+								//Payment refund Process will be here
+								//=========================================================================
+							}
+							else if($result['Status']=="REFUND")
+							{
+								echo "user Recharge refunded";
+								echo "user Recharge Fail due to ".$result['STATUS'];
+								$updatetrans = array(
+									'APItransactionId' => $result['Tid'],
+									'APIresponcecode' => 'REFUND',
+									'Transactiondetail' => json_decode($result),
+									'Status' => 'Fail'
+								);
+								$trans = $this->common_model->updateData(TBLTRANSACTIONHISTORY, $updatetrans, 'id = '.$trans);
+								//=========================================================================
+								//Payment refund Process will be here
+								//=========================================================================
+							}
+							else
+							{
+								echo $result['STATUS'];
+								echo "user Recharge Fail due to ".$result['STATUS'];
+								$updatetrans = array(
+									'APItransactionId' => $result['Tid'],
+									'APIresponcecode' => '',
+									'Transactiondetail' => json_decode($result),
+									'Status' => 'Fail'
+								);
+								$trans = $this->common_model->updateData(TBLTRANSACTIONHISTORY, $updatetrans, 'id = '.$trans);
+								//=========================================================================
+								//Payment refund Process will be here
+								//=========================================================================
+							}
+							
+							
+							pr($result,1);
 						
-						$postdata = http_build_query(array('userid' => 'UserId' // Login UserId
-						, 'pass' => 'Pass' // Login password
-						, 'mob' => $post['mobileno'] // Mobile number to recharge
-						, 'opt' => $post['provider'] // Operator code given by API provider
-						, 'amt' => $post['amount'] // Amount to recharge
-						, 'agentid' => $uniqueNo // Our unique Id
-						  ));
-						$result=callrechargeAPI($postdata);
-						pr($result,1);
 					}
 				}
 			}
@@ -105,6 +178,22 @@ class Index extends CI_Controller {
 		}
 		$data['view'] = "index";
 		$this->load->view('content', $data);
+	}
+	public function checkuser()
+	{
+		$post = $this->input->post();
+		if($post)
+		{
+			$isUnique=$this->common_model->isUnique(TBLUSER, 'mobileno', trim($post['mo']));
+			if($isUnique)
+			{
+				echo 'Unique';
+			}
+			else 
+			{
+				echo "Exist";
+			}
+		}	
 	}
 	public function articals()
 	{
