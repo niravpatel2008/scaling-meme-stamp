@@ -1,7 +1,7 @@
 <p>Your login details are: </p>
 <p>
-    Username: {username}<br/>
-    Password: {password}
+    Mobile number: <?=$mobile?><br/>
+    Password: <?=$password?>
 </p>
 <p>
     Thank you

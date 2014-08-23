@@ -65,8 +65,10 @@ define('TBLUSERLOGINHISTORY',	'tbluserloginhistory');
 /**
 * Email constants
 */
-define('FROM_EMAIL', 'noreply@recharge.com');
-define('FROM_NAME', 'recharge');
+define('FROM_EMAIL', 'noreply@ezcell.com');
+define('FROM_NAME', 'ezcell');
+define('SUBJECT_LOGIN_INFO', 'Ezcell login info');
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
