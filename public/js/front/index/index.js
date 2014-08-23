@@ -11,8 +11,12 @@ $("#btnApply").on("click",function(){
 				var data=$.parseJSON(response);
 				if(data['status']=='Success')
 				{
-					var aldata="Now pay only : "+data['paymentAmt'] +" Inated of "+data['actualAmt'];
-					alert(aldata);
+					//var aldata="Now pay only : "+data['paymentAmt'] +" Inated of "+data['actualAmt'];
+					//alert(aldata);
+					$("#disamount").text(parseFloat(data['actualAmt'])-parseFloat(data['paymentAmt']));
+					$("#disamountrow").show();
+					$("#payamount").text(parseFloat(data['paymentAmt']));
+					$("#payamountrow").show();
 				}
 				else if(data['status']=='Error')
 				{
