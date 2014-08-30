@@ -51,6 +51,7 @@ define('STATES_CITIES',	'states_cities');
 define('TBLBLOCKIP',	'tblblockip');
 define('TBLCIRCLE',	'tblcircle');
 define('TBLCOUPON',	'tblcoupon');
+define('TBLCODE',	'tblcode');
 define('TBLCREDITCARDPROFILE',	'tblcreditcardprofile');
 define('TBLPAYMENTHISTORY',	'tblpaymenthistory');
 define('TBLREDEEMPRODUCT',	'tblredeemproduct');
