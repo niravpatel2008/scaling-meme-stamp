@@ -61,11 +61,10 @@
 		<script src="<?=public_path()?>js/plugins/location/locationpicker.jquery.js" type="text/javascript"></script>
     <?php } ?>
 
-	<?php if ($this->router->fetch_class() == "deal" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
-		<script src="<?=public_path()?>js/plugins/tagedit/jquery.tagedit.js" type="text/javascript"></script>
-		<script src="<?=public_path()?>js/plugins/tagedit/jquery.autoGrowInput.js" type="text/javascript"></script>
-		<script src="<?=public_path()?>js/plugins/dropzone/dropzone.js" type="text/javascript"></script>
-    <?php } ?>
+	<?php if ($this->router->fetch_class() == "coupon") { ?>
+		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
+	 <?php } ?>
 
     <script src="<?=public_path()?>js/AdminLTE/app.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/AdminLTE/demo.js" type="text/javascript"></script>
