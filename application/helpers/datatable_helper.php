@@ -80,7 +80,9 @@ class SSP {
 						'ASC' :
 						'DESC';
 					
-					if(isset($column['coloumn_name']))
+					if(isset($column['sort']))
+						$orderBy[] = $column['sort'].'||'.$dir;
+					else if(isset($column['coloumn_name']))
 						$orderBy[] = $column['coloumn_name'].'||'.$dir;
 					else
 						$orderBy[] = $column['db'].'||'.$dir;
@@ -124,7 +126,10 @@ class SSP {
 				$column = $columns[ $columnIdx ];
 
 				if ( $requestColumn['searchable'] == 'true' ) {
-					$globalSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
+					if(isset($column['coloumn_name']))
+						$globalSearch[] = "`".$column['coloumn_name']."` LIKE ".'"%'.$str.'%"';
+					else
+						$globalSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
 				}
 			}
 		}
@@ -139,7 +144,10 @@ class SSP {
 
 			if ( $requestColumn['searchable'] == 'true' &&
 			 $str != '' ) {
-				$columnSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
+				if(isset($column['coloumn_name']))
+					$columnSearch[] = "`".$column['coloumn_name']."` LIKE ".'"%'.$str.'%"';
+				else
+					$columnSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
 			}
 		}
 
@@ -180,12 +188,13 @@ class SSP {
 		$model = SSP::get_model();
 
 		$fields = SSP::pluck($columns, 'db');
+		$model->db->select("SQL_CALC_FOUND_ROWS ".$primaryKey, FALSE);
 		$model->db->select($fields);
 		$model->db->from($table);
 
 		foreach($join as $j)
 		{
-			$model->db->join($j[0], $j[1]);
+			$model->db->join($j[0], $j[1],isset($j[2])?$j[2]:"");
 		}
 		
 		$where = SSP::filter( $request, $columns, $bindings );
@@ -204,16 +213,13 @@ class SSP {
 
 		$rows = isset($request['start'])?$request['start']:"";
 		$limit = isset($request['length'])?$request['length']:0;
-		if ($limit > 0 && $rows == "") {
-			$model->db->limit($limit);
-		}	
-		if ($rows > 0) {
-			$model->db->limit($rows, $limit);
-		}
+		$model->db->limit($limit, $rows);
 
 		$query = $model->db->get();
 
-		$recordsFiltered = $query->num_rows();
+		$cquery = $model->db->query('SELECT FOUND_ROWS() AS `Count`');
+
+		$recordsFiltered = $cquery->row()->Count;
 		$data = $query->result_array();
 		$query->free_result();
 		

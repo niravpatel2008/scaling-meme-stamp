@@ -23,6 +23,4 @@ class coupon_model extends CI_Model{
 
         return $data;
     }
-
-
 }
