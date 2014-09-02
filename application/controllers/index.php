@@ -32,7 +32,7 @@ class Index extends CI_Controller {
 			}
 
 			if ($this->form_validation->run()) {
-				
+
 				if($isUnique)
 				{
 					$insertdata = array('Firstname' => $post['username'],
@@ -54,7 +54,7 @@ class Index extends CI_Controller {
 				{
 					if(isset($this->front_session['couponCode']) && $this->front_session['couponCode']!=0)
 					{
-						
+
 					}
 					else
 					{
@@ -62,7 +62,7 @@ class Index extends CI_Controller {
 						$this->session->set_userdata('front_session',$session_data);
 					}
 					$this->front_session = $this->session->userdata('front_session');
-					
+
 					if(isset($this->front_session['topupAmount']) && isset($this->front_session['actualAmount']))
 					{
 						$uniqueNo=rand ( 10000 , 999999 );
@@ -80,7 +80,7 @@ class Index extends CI_Controller {
 								'Status' => 'Pending'
 							);
 							$trans = $this->common_model->insertData(TBLTRANSACTIONHISTORY, $inserttrans);
-						
+
 							$insertpaymenttrans = array('tblTransactionhistory_id' => $trans,
 									'tblUser_id' => $post['provider'],
 									'tblCoupon_id' => '',
@@ -93,13 +93,13 @@ class Index extends CI_Controller {
 									'Status' => 'Pending'
 								);
 							$paymenttrans = $this->common_model->insertData(TBLPAYMENTHISTORY, $insertpaymenttrans);
-							
-							
+
+
 							//=========================================================================
 							//Payment Process will be here
 							//=========================================================================
-							
-							
+
+
 							$postdata = http_build_query(array('userid' => '5773646' // Login UserId
 							, 'pass' => '5590' // Login password
 							, 'mob' => $post['mobileno'] // Mobile number to recharge
@@ -118,7 +118,7 @@ class Index extends CI_Controller {
 									'Status' => 'Success'
 								);
 								$updatetrans = $this->common_model->updateData(TBLTRANSACTIONHISTORY, $updatetrans, 'id = '.$trans);
-									
+
 							}
 							else if($result['Status']=="FAILED")
 							{
@@ -164,10 +164,10 @@ class Index extends CI_Controller {
 								//Payment refund Process will be here
 								//=========================================================================
 							}
-							
-							
+
+
 							pr($result,1);
-						
+
 					}
 				}
 			}
@@ -189,11 +189,11 @@ class Index extends CI_Controller {
 			{
 				echo 'Unique';
 			}
-			else 
+			else
 			{
 				echo "Exist";
 			}
-		}	
+		}
 	}
 	public function articals()
 	{
@@ -212,12 +212,13 @@ class Index extends CI_Controller {
 	}
 	public function applycoupon()
 	{
+		$this->load->model('coupon_model');
 		$post = $this->input->post();
 		if($post)
 		{
 			$coupon=$post['Code'];
 			$amount=$post['Amt'];
-			$codeData=$this->common_model->checkCoupon($coupon);
+			$codeData=$this->coupon_model->checkCoupon($coupon);
 			if(!empty($codeData))
 			{
 				if($codeData->Code==$coupon)
@@ -239,7 +240,7 @@ class Index extends CI_Controller {
 					}
 					else if ($codeData->Type=='Offer')
 					{
-						
+
 					}
 				}
 				else
@@ -323,6 +324,40 @@ class Index extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
+
+	public function forgotpassword()
+	{
+		$this->load->helper('string');
+		$post = $this->input->post();
+		if ($post) {
+			$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
+
+			if ($this->form_validation->run()) {
+				#get user
+				$user = $this->common_model->selectData(TBLUSER, '*', array('EmailId' => $post['email']));
+				if (count($user) > 0) {
+					$password = random_string('alnum', 8);
+					$update_data = array('Password' => md5($password) );
+	                $ret = $this->common_model->updateData(TBLUSER, $update_data, array('id' => $user[0]->id) );
+
+	                #send email of new password
+	                $login_info = array('mobile' => $user[0]->Mobileno,
+	                					'password' => $password
+	                				);
+	                $emailTpl = $this->load->view('email_templates/forgot_password', $login_info, true);
+					$ret = sendEmail($post['email'], SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
+
+					$data['flash_msg'] = "New password has been sent to your email.";
+				}else{
+					$data['flash_msg'] = "Sorry email address could not be found.";
+				}
+
+			}
+		}
+
+		$data['view'] = "forgot_password";
+		$this->load->view('content', $data);
+	}
 
 	public function signout()
 	{
