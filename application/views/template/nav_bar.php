@@ -28,7 +28,8 @@
 				?>
 					<span class="image avatar48"><img src="<?=public_path()?>images/avtar.png" alt="" /></span>
 					<h1 id="title">Hello Guest</h1>
-					<a href="<?=base_url()?>signin">Sign in</a>
+					<a href="<?=base_url()?>signin">Sign in</a><br/>
+					<a href="<?=base_url()?>forgotpassword">Forgot password</a>
 				<?php
 					}
 				?>
