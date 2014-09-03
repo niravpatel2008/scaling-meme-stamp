@@ -13,6 +13,22 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#coupon_uid').on('change',function(){
+		$('#tblUser_id').val($(this).val());
+		var url = admin_path()+'coupon/coupon_list/';
+		$.post(url,{"tblUser_id":$(this).val()},function(e){
+			e = JSON.parse(e);
+			var optHtml = "";
+			for(option in e)
+			{
+				opt = e[option];
+				optHtml += "<option value='"+opt.id+"'> "+opt.name+" ("+opt.Type+") </option>";
+			}
+			$('#select_coupon').html(optHtml);
+			$('#select_coupon').change();
+		});
+	});
+
 	$('#coupon_type').on('change',function(){
 		if($(this).val()=='Offer')
 			$('#coupon_disounton_div').show().find("input").addClass("validate[required]");
@@ -22,7 +38,7 @@ $(document).ready(function() {
 
 	$("#select_coupon").on("change",function(){
 		var coupon_id = $(this).val();
-		if (coupon_id == "") return;
+		//if (coupon_id == "") return;
 
 		oTable.fnClearTable(0);
 		oTable.fnDraw();

@@ -34,7 +34,7 @@
 					</div>
                 </div>
                 <div class="box-body">
-					<select class="form-control validate[required]" id="t_uid" name="t_uid">
+					<select class="form-control validate[required]" id="coupon_uid" name="coupon_uid">
 						<option value="">Select</option>
 						<?php foreach ($users as $user) { ?>
 							<option value='<?=$user->id; ?>'><?=$user->Firstname." (".$user->EmailId.")"; ?></option>
@@ -53,6 +53,9 @@
 					</div>
                 </div>
 				<form id='coupon_form' name='coupon_form' role="form" action="<?=admin_path()?>coupon/add" method="post">
+				<?php if ($this->user_session['role'] == 'a') { ?>
+					 <input type="hidden" placeholder="Enter ..." class="form-control" name="tblUser_id" id="tblUser_id" value="" />
+				<?php } ?>
                 <div class="box-body">
 					<div class="form-group">
                         <label>Name:</label>
