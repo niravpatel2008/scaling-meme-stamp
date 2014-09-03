@@ -34,15 +34,17 @@ class Coupon extends CI_Controller {
 		$columns = array(
 			array( 'db' => 'code',  'dt' => 0 ),
 			array( 'db' => 'Firstname',  'dt' => 1 ),
-			array( 'db' => 'Mobileno', 'dt' => 4 ),
+			array( 'db' => 'Mobileno', 'dt' => 2 ),
+			array( 'db' => 'status', 'dt' => 3 ),
 			array('db'        => 'used_date',
-					'dt'        => 8,
+					'dt'        => 4,
 					'formatter' => function( $d, $row ) {
 						return date( 'jS M y', strtotime($d));
 					}
 			),
+			array( 'db' => 'comment', 'dt' => 5 ),
 			array( 'db' => 'CONCAT(tblcode.id,"|",tblcode.status)',
-					'dt' => 9,
+					'dt' => 6,
 					'formatter' => function( $d, $row ) {
 						list($id,$status) = explode("|",$d);
 						return '<a href="javascript:void(0);" data-tblcode_id="'.$id.'" class="fa fa-eye code-status '.$status.'"></a>';

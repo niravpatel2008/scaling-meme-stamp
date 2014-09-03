@@ -142,31 +142,25 @@
                         <table id="codeTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Deal</th>
-                                    <th>Dealer</th>
-                                    <th>User</th>
-                                    <th>Contact</th>
-                                    <th>Email</th>
-                                    <th>Payment Option</th>
-                                    <th>Amount Paid</th>
-                                    <th>Deal Status</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
-                                </tr>
+									<th>Code</th>
+									<th>Name</th>
+									<th>Mobile No</th>
+									<th>Status</th>
+									<th>Date</th>
+									<th>Note</th>
+									<th>Action</th>
+								</tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Deal</th>
-                                    <th>Dealer</th>
-                                    <th>User</th>
-                                    <th>Contact</th>
-                                    <th>Email</th>
-                                    <th>Payment Option</th>
-                                    <th>Amount Paid</th>
-                                    <th>Deal Status</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
-                                </tr>
+									<th>Code</th>
+									<th>Name</th>
+									<th>Mobile No</th>
+									<th>Status</th>
+									<th>Date</th>
+									<th>Note</th>
+									<th>Action</th>
+								</tr>
                             </tfoot>
                         </table>
                     </div><!-- /.box-body -->
