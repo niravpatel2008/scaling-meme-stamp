@@ -64,9 +64,10 @@ class Coupon extends CI_Controller {
 	public function coupon_list()
 	{
 		$post = $this->input->post();
-		$userId = trim($post['tblUser_id']);
-		if ($userId == "")
-		$user = $this->common_model->selectData(TBLCOUPON, 'id,name,Status', array('tblUser_id'=>$userId,''));
+		$userId = (isset($post['tblUser_id']) && trim($post['tblUser_id'])!="")?$post['tblUser_id']:$this->user_session['id'];
+		$user = array();
+		if ($userId != "")
+			$user = $this->common_model->selectData(TBLCOUPON, 'id,name,Type', array('tblUser_id'=>$userId));
 		echo json_encode($user);
 	}
 
